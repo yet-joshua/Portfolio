@@ -1,0 +1,109 @@
+{
+    "profile": {
+        "firstName": "JOSHUA",
+        "lastName": "YET",
+        "middleInitial": "V.",
+        "role": "FULL-STACK TEAM LEAD",
+        "location": "MANILA, PH",
+        "estYear": "2018",
+        "email": "yetjoshua009@gmail.com",
+        "github": "github.com/yet-joshua",
+        "linkedin": "linkedin.com/in/joshua-yet-23823a347",
+        "status": "OPEN TO / JUNIOR ROLES",
+        "availability": "OPEN FOR COLLABORATION",
+        "timezone": "GMT+8 — Manila",
+        "response": "< 24 HRS",
+        "preferred": "REMOTE OR HYBRID",
+        "rate": "ON REQUEST"
+    },
+    "education": {
+        "school": "Camarines Norte State College",
+        "degree": "BS in Information Technology",
+        "duration": "2021 — 2025"
+    },
+    "projects": [
+        {
+            "id": "P.01",
+            "name": "GUARDIAN-API",
+            "stack": [
+                "LARAVEL 12",
+                "REACT",
+                "DOCKER"
+            ],
+            "description": "LEGAL SERVICES PLATFORM WITH ROBUST BACKEND AND ADMIN DASHBOARD.",
+            "link": "https://github.com/yet-joshua/guardian-api"
+        },
+        {
+            "id": "P.02",
+            "name": "LAUNDRY OPS",
+            "stack": [
+                "LARAVEL",
+                "REEDIS",
+                "INERTIA.JS"
+            ],
+            "description": "SCALABLE MANAGEMENT SYSTEM BUILT FOR HIGH-PERFORMANCE BUSINESS OPS.",
+            "link": "https://github.com/yet-joshua/laundry-management-system"
+        },
+        {
+            "id": "P.03",
+            "name": "DANCE & ARTS UK",
+            "stack": [
+                "TANSTACK START",
+                "REACT 19",
+                "SUPABASE"
+            ],
+            "description": "DISTRIBUTED SCHEDULING AND COMMUNICATION SYSTEM FOR UK EDUCATIONAL CLUBS.",
+            "link": "#"
+        },
+        {
+            "id": "P.04",
+            "name": "NFT MARKETPLACE",
+            "stack": [
+                "NEXT.JS 12",
+                "TAILWIND",
+                "ETHERS.JS"
+            ],
+            "description": "FRONTEND OVERHAUL FOR DECENTRALIZED ASSET TRADING AND WALLET CONNECTION.",
+            "link": "https://github.com/yet-joshua/nft-marketplace"
+        }
+    ],
+    "skills": {
+        "frameworks": [
+            {
+                "name": "REACT / NEXT.JS",
+                "sub": "6 YEARS PRODUCTION",
+                "freq": 2
+            },
+            {
+                "name": "LARAVEL / PHP",
+                "sub": "7 YEARS EXPERIENCE",
+                "freq": 2.5
+            }
+        ],
+        "devops": [
+            {
+                "name": "DOCKER / AWS",
+                "sub": "CONTAINERIZATION & CLOUD",
+                "freq": 1.8
+            }
+        ],
+        "scorecards": [
+            {
+                "name": "MYSQL",
+                "percent": 92
+            },
+            {
+                "name": "REDIS",
+                "percent": 85
+            },
+            {
+                "name": "POSTGRESQL",
+                "percent": 80
+            },
+            {
+                "name": "REST API",
+                "percent": 95
+            }
+        ]
+    }
+}

@@ -1,0 +1,1284 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua V. Yet — Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@700&family=JetBrains+Mono:wght@400&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #F5F5F5;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 0;
+            cursor: none;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-sans-head {
+            font-family: 'Instrument Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Strict Design Rules */
+        * {
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+
+        /* Container rules - No border radius except for specific UI dots */
+        div:not(.is-dot):not(#cursor-dot):not(#cursor-ring) {
+            border-radius: 0 !important;
+        }
+
+        /* Typography outlines */
+        .text-outline {
+            -webkit-text-stroke: 1px #2a2a2a;
+            color: transparent;
+        }
+
+        .text-outline-white {
+            -webkit-text-stroke: 1px #ffffff;
+            color: transparent;
+        }
+
+        /* Hover Invert Interaction */
+        .hover-invert {
+            transition: none;
+            /* Flat interactions */
+        }
+
+        .hover-invert:hover {
+            background-color: #39FF14 !important;
+            color: #050505 !important;
+        }
+
+        .hover-invert:hover * {
+            color: #050505 !important;
+            border-color: #050505 !important;
+            -webkit-text-stroke-color: #050505 !important;
+        }
+
+        /* Nav Link Underline */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: #39FF14;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Text Reveal */
+        @keyframes revealUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .reveal-text {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: revealUp 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+        }
+
+        /* Scroll Indicator Scan */
+        @keyframes scan {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .animate-scan {
+            animation: scan 2s linear infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #050505;
+            border-left: 1px solid #222;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #39FF14;
+        }
+
+        /* Scene 2 Specifics */
+        #scene-projects-wrapper {
+            height: 400vh;
+            background-color: #050505;
+            position: relative;
+        }
+
+        .sticky-container {
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header-work {
+            height: 72px;
+            width: 100%;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background-color: #050505;
+            z-index: 50;
+        }
+
+        .work-title-outline {
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 80px;
+            -webkit-text-stroke: 1px #222;
+            color: transparent;
+            line-height: 1;
+        }
+
+        #projects-track {
+            display: flex;
+            height: calc(100vh - 72px);
+            width: max-content;
+            will-change: transform;
+        }
+
+        .project-card {
+            width: 68vw;
+            height: 100%;
+            border-right: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: skew 0.1s ease-out;
+        }
+
+        .visual-zone {
+            height: 70%;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #222;
+        }
+
+        .visual-zone canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .visual-zone svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            opacity: 0.8;
+            stroke: #222;
+            stroke-width: 0.5;
+            fill: none;
+        }
+
+        .project-card:hover .visual-zone svg {
+            stroke: #444;
+            animation: rgbSplit 0.25s steps(2) infinite;
+        }
+
+        @keyframes rgbSplit {
+            0% {
+                filter: none
+            }
+
+            25% {
+                filter: drop-shadow(3px 0 0 rgba(255, 0, 0, 0.7)) drop-shadow(-3px 0 0 rgba(121, 239, 107, 0.7))
+            }
+
+            75% {
+                filter: drop-shadow(-3px 0 0 rgba(255, 0, 0, 0.7)) drop-shadow(3px 0 0 rgba(0, 255, 255, 0.7))
+            }
+
+            100% {
+                filter: none
+            }
+        }
+
+        .info-zone {
+            height: 30%;
+            padding: 3vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-name {
+            font-family: 'Instrument Sans', sans-serif;
+            font-weight: 700;
+            font-size: 3.5vw;
+            line-height: 1;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover .project-name {
+            color: #39FF14;
+        }
+
+        .stack-pills {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .stack-pill {
+            border: 1px solid #222;
+            padding: 4px 12px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .stack-pill:hover {
+            border-color: #39FF14;
+            color: #39FF14;
+        }
+
+        .project-arrow {
+            width: 48px;
+            height: 48px;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover .project-arrow {
+            background-color: #39FF14;
+            border-color: #39FF14;
+        }
+
+        .project-card:hover .project-arrow svg {
+            stroke: #050505;
+        }
+
+
+
+        #cursor-ring {
+            opacity: 0.5;
+        }
+
+        /* Scene 3 & 4 Layout */
+        #content-stack {
+            position: relative;
+            background-color: #050505;
+        }
+
+        .vertical-guide {
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #39FF14;
+            opacity: 0.4;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        #scene-skills {
+            border-top: 1px solid #222;
+            position: relative;
+            z-index: 10;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-left: 1px solid #222;
+        }
+
+        .bento-cell {
+            border-right: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #444;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .bento-title {
+            font-family: 'Instrument Sans', sans-serif;
+            font-weight: 700;
+            font-size: 2.5vw;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .bento-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #333;
+        }
+
+        .freq-canvas {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            pointer-events: none;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 10px 0;
+        }
+
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+        }
+
+        .skill-bar-track {
+            width: 100%;
+            height: 1px;
+            background-color: #222;
+            position: relative;
+        }
+
+        .skill-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #39FF14;
+            width: 0%;
+        }
+
+        #scene-contact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid #222;
+            position: relative;
+            z-index: 10;
+        }
+
+        .contact-left {
+            padding: 80px 40px 80px 80px;
+        }
+
+        .contact-right {
+            padding: 80px 40px;
+            border-left: 1px solid #222;
+        }
+
+        .giant-text {
+            font-family: 'Instrument Sans', sans-serif;
+            font-weight: 700;
+            font-size: 9vw;
+            line-height: 0.9;
+        }
+
+        .contact-links {
+            margin-top: 60px;
+            border-top: 1px solid #222;
+        }
+
+        .contact-row {
+            padding: 30px 0;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Instrument Sans', sans-serif;
+            font-weight: 700;
+            font-size: 2vw;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding-right: 20px;
+        }
+
+        .contact-row:hover {
+            background-color: #39FF14;
+            color: #050505;
+            padding-left: 20px;
+        }
+
+        .contact-row svg {
+            transition: transform 0.25s ease;
+        }
+
+        .contact-row:hover svg {
+            transform: rotate(45deg);
+            stroke: #050505;
+        }
+
+        .spec-table {
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #222;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #F5F5F5;
+        }
+
+        .spec-label {
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        footer {
+            height: 64px;
+            border-top: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-[#39FF14] selection:text-[#050505]">
+
+    <!-- Film Grain Overlay -->
+    <svg class="fixed inset-0 w-full h-full pointer-events-none z-[100] opacity-[0.02] mix-blend-overlay">
+        <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" id="turbulence">
+            </feTurbulence>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
+    </svg>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"
+        class="fixed top-0 left-0 w-2 h-2 bg-[#39FF14] pointer-events-none z-[9999] mix-blend-difference rounded-full"
+        style="transform: translate(-50%, -50%);"></div>
+    <div id="cursor-ring"
+        class="fixed top-0 left-0 w-8 h-8 border border-[#39FF14] pointer-events-none z-[9999] mix-blend-difference rounded-full"
+        style="transform: translate(-50%, -50%);"></div>
+
+    <!-- Navigation Bar -->
+    <header id="main-nav"
+        class="fixed top-0 left-0 w-full h-[64px] border-b border-[#222] bg-[#050505]/95 z-40 flex items-center px-6 justify-between -translate-y-full">
+        <div class="text-[11px] text-[#39FF14]">JVY</div>
+
+        <nav class="flex gap-8">
+            <a href="#scene-projects-wrapper"
+                class="nav-link relative text-[10px] text-[#F5F5F5] uppercase pb-1 tracking-widest uppercase">Work</a>
+            <a href="#scene-skills"
+                class="nav-link relative text-[10px] text-[#F5F5F5] uppercase pb-1 tracking-widest uppercase">Stack</a>
+            <a href="#scene-contact"
+                class="nav-link relative text-[10px] text-[#F5F5F5] uppercase pb-1 tracking-widest uppercase">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+            <div class="is-dot w-1.5 h-1.5 bg-[#39FF14] rounded-full animate-pulse"></div>
+            <div class="text-[10px] text-[#444] uppercase tracking-widest">Available for work</div>
+        </div>
+    </header>
+
+    <!-- WebGL Canvas Hero Background -->
+    <canvas id="hero-canvas" class="fixed inset-0 w-full h-full z-0 pointer-events-none opacity-0"></canvas>
+
+    <!-- Main Layout Content -->
+    <main class="relative z-10 w-full flex flex-col">
+
+        <!-- Scene 1: Hero -->
+        <section class="h-screen w-full relative border-b border-[#222] flex flex-col justify-end">
+
+            <!-- Hero Text (Bottom Left) -->
+            <div id="hero-text"
+                class="absolute bottom-0 left-0 flex flex-col uppercase font-sans-head leading-[0.85] tracking-tight p-6">
+                <div class="overflow-hidden">
+                    <span class="reveal-text text-[13vw]" style="letter-spacing: -0.04em;">JOSHUA</span>
+                </div>
+                <div class="overflow-hidden">
+                    <span class="reveal-text text-[13vw]" style="letter-spacing: -0.04em;">V.
+                        <span class="text-outline-white">YET</span></span>
+                </div>
+                <div class="overflow-hidden">
+                    <span class="reveal-text text-[#39FF14] text-[6vw]">—ENGINEER</span>
+                </div>
+            </div>
+
+            <!-- Metadata (Bottom Right) -->
+            <div id="hero-meta"
+                class="absolute bottom-12 right-12 text-[10px] text-[#444] text-right uppercase tracking-widest leading-relaxed opacity-0">
+                FULL-STACK TEAM LEAD<br>
+                MANILA, PH<br>
+                LARAVEL + REACT<br>
+                BSIT 2025
+            </div>
+
+            <!-- Scroll Indicator -->
+            <!-- <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+                <div class="text-[10px] text-[#333] uppercase tracking-widest">Scroll to initialize</div>
+                <div class="w-[60px] h-[1px] bg-[#222] relative overflow-hidden">
+                    <div class="absolute top-0 left-0 h-full bg-[#39FF14] w-full animate-scan"></div>
+                </div>
+            </div> -->
+
+        </section>
+
+        <!-- Scene 2: Horizontal Project Timeline -->
+        <section id="scene-projects-wrapper">
+
+
+            <div class="sticky-container">
+                <!-- Section Header -->
+                <div class="section-header-work">
+                    <div class="flex items-center gap-6">
+                        <span class="work-title-outline">02</span>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] tracking-[0.3em] font-bold">SELECTED</span>
+                            <span class="text-[10px] tracking-[0.3em] font-bold text-[#444]">WORK</span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-[#333] tracking-widest uppercase">
+                        4 PROJECTS / SCROLL →
+                    </div>
+                </div>
+
+                <!-- Projects Horizontal Track -->
+                <div id="projects-track">
+
+                    <!-- Project 01 -->
+                    <div class="project-card">
+                        <div class="visual-zone">
+                            <canvas class="card-canvas"></canvas>
+                            <svg viewBox="0 0 400 300">
+                                <rect x="20" y="20" width="360" height="260" stroke="#333" />
+                                <line x1="20" y1="60" x2="380" y2="60" stroke="#333" />
+                                <line x1="120" y1="60" x2="120" y2="280" stroke="#333" />
+                                <rect x="140" y="80" width="60" height="15" fill="#111" />
+                                <rect x="220" y="80" width="140" height="15" fill="#111" />
+                                <rect x="140" y="110" width="220" height="100" stroke="#333" />
+                                <circle cx="160" cy="240" r="5" fill="#39FF14" opacity="0.5" />
+                                <circle cx="180" cy="240" r="5" fill="#39FF14" opacity="0.3" />
+                                <line x1="40" y1="80" x2="100" y2="80" stroke="#333" />
+                                <line x1="40" y1="100" x2="80" y2="100" stroke="#333" />
+                                <line x1="40" y1="120" x2="90" y2="120" stroke="#333" />
+                            </svg>
+                        </div>
+                        <div class="info-zone">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-mono text-[#333] mb-2">P.01</span>
+                                <h3 class="project-name">GUARDIAN-API</h3>
+                                <div class="stack-pills">
+                                    <span class="stack-pill">Laravel 12</span>
+                                    <span class="stack-pill">React</span>
+                                    <span class="stack-pill">Docker</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <p class="text-[10px] text-[#444] max-w-[200px] leading-relaxed">LEGAL SERVICES PLATFORM
+                                    WITH ROBUST BACKEND AND ADMIN DASHBOARD.</p>
+                                <div class="project-arrow">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333"
+                                        stroke-width="1.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 02 -->
+                    <div class="project-card">
+                        <div class="visual-zone">
+                            <canvas class="card-canvas"></canvas>
+                            <svg viewBox="0 0 400 300">
+                                <rect x="100" y="40" width="200" height="220" stroke="#333" />
+                                <line x1="100" y1="80" x2="300" y2="80" stroke="#333" />
+                                <line x1="100" y1="140" x2="300" y2="140" stroke="#333" />
+                                <line x1="100" y1="200" x2="300" y2="200" stroke="#333" />
+                                <rect x="110" y="50" width="10" height="10" fill="#333" />
+                                <rect x="110" y="90" width="10" height="10" fill="#333" />
+                                <rect x="110" y="150" width="10" height="10" fill="#333" />
+                                <rect x="110" y="210" width="10" height="10" fill="#333" />
+                                <text x="130" y="60" fill="#222" font-size="8" font-family="Monospace">API TIER</text>
+                                <text x="130" y="100" fill="#222" font-size="8" font-family="Monospace">CACHE</text>
+                                <text x="130" y="160" fill="#222" font-size="8" font-family="Monospace">DB
+                                    REPLICA</text>
+                            </svg>
+                        </div>
+                        <div class="info-zone">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-mono text-[#333] mb-2">P.02</span>
+                                <h3 class="project-name">LAUNDRY OPS</h3>
+                                <div class="stack-pills">
+                                    <span class="stack-pill">Inertia.js</span>
+                                    <span class="stack-pill">Redis</span>
+                                    <span class="stack-pill">Docker</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <p class="text-[10px] text-[#444] max-w-[200px] leading-relaxed">SCALABLE MANAGEMENT
+                                    SYSTEM BUILT FOR HIGH-PERFORMANCE BUSINESS OPS.</p>
+                                <div class="project-arrow">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333"
+                                        stroke-width="1.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 03 -->
+                    <div class="project-card">
+                        <div class="visual-zone">
+                            <canvas class="card-canvas"></canvas>
+                            <svg viewBox="0 0 400 300">
+                                <path d="M50 50 L350 50 L350 250 L50 250 Z" stroke="#333" />
+                                <line x1="50" y1="100" x2="350" y2="100" stroke="#111" />
+                                <line x1="50" y1="150" x2="350" y2="150" stroke="#111" />
+                                <line x1="50" y1="200" x2="350" y2="200" stroke="#111" />
+                                <line x1="125" y1="50" x2="125" y2="250" stroke="#111" />
+                                <line x1="200" y1="50" x2="200" y2="250" stroke="#111" />
+                                <line x1="275" y1="50" x2="275" y2="250" stroke="#111" />
+                                <circle cx="200" cy="150" r="40" stroke="#333" />
+                                <path d="M180 130 Q 200 110 220 130" stroke="#39FF14" stroke-width="1" />
+                            </svg>
+                        </div>
+                        <div class="info-zone">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-mono text-[#333] mb-2">P.03</span>
+                                <h3 class="project-name">DANCE & ARTS UK</h3>
+                                <div class="stack-pills">
+                                    <span class="stack-pill">TanStack Start</span>
+                                    <span class="stack-pill">React 19</span>
+                                    <span class="stack-pill">Supabase</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <p class="text-[10px] text-[#444] max-w-[200px] leading-relaxed">DISTRIBUTED SCHEDULING
+                                    AND COMMUNICATION SYSTEM FOR UK EDUCATIONAL CLUBS.</p>
+                                <div class="project-arrow">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333"
+                                        stroke-width="1.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 04 -->
+                    <div class="project-card">
+                        <div class="visual-zone">
+                            <canvas class="card-canvas"></canvas>
+                            <svg viewBox="0 0 400 300">
+                                <line x1="40" y1="150" x2="360" y2="150" stroke="#222" />
+                                <polyline points="40,150 80,100 120,200 160,150 200,80 240,220 280,150 320,130 360,150"
+                                    stroke="#111" fill="none" />
+                                <polyline points="40,150 80,130 120,170 160,150 200,140 240,160 280,150" stroke="#333"
+                                    fill="none" />
+                                <text x="40" y="270" fill="#222" font-size="8" font-family="Monospace">20Hz</text>
+                                <text x="320" y="270" fill="#222" font-size="8" font-family="Monospace">20kHz</text>
+                                <rect x="180" y="70" width="2" height="160" fill="#39FF14" opacity="0.2" />
+                            </svg>
+                        </div>
+                        <div class="info-zone">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-mono text-[#333] mb-2">P.04</span>
+                                <h3 class="project-name">NFT MARKETPLACE</h3>
+                                <div class="stack-pills">
+                                    <span class="stack-pill">Next.js 12</span>
+                                    <span class="stack-pill">Tailwind</span>
+                                    <span class="stack-pill">Ethers.js</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <p class="text-[10px] text-[#444] max-w-[200px] leading-relaxed">FRONTEND OVERHAUL FOR
+                                    DECENTRALIZED ASSET TRADING AND WALLET CONNECTION.</p>
+                                <div class="project-arrow">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333"
+                                        stroke-width="1.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Stack: Scene 3 & 4 with Vertical Guide -->
+        <div id="content-stack">
+            <div class="vertical-guide"></div>
+
+            <!-- Scene 3: Skills -->
+            <section id="scene-skills">
+                <div class="flex items-center justify-between px-10 py-12 border-b border-[#222]">
+                    <div class="flex items-center gap-8">
+                        <span class="work-title-outline">03</span>
+                        <h2 class="font-sans-head text-[4vw] uppercase">Technical / Stack</h2>
+                    </div>
+                    <div class="font-mono text-[11px] text-[#444] uppercase tracking-widest">
+                        CURSOR PROXIMITY = FREQUENCY
+                    </div>
+                </div>
+
+                <div class="bento-grid">
+                    <!-- Row 1 -->
+                    <div class="bento-cell col-span-5 h-[300px]">
+                        <span class="bento-label">Frameworks / UI</span>
+                        <h3 class="bento-title">REACT / NEXT.JS</h3>
+                        <span class="bento-sub">6 YEARS PRODUCTION</span>
+                        <canvas class="freq-canvas" data-base-freq="2"></canvas>
+                        <p class="font-sans-head text-[1.2vw] font-medium leading-tight mt-4">
+                            BS in Information Technology @ CNSC — 2025
+                        </p>
+                    </div>
+                    <div class="bento-cell col-span-4 h-[300px]">
+                        <span class="bento-label">Backend / Systems</span>
+                        <h3 class="bento-title">LARAVEL / PHP</h3>
+                        <span class="bento-sub">7 YEARS EXPERIENCE</span>
+                        <canvas class="freq-canvas" data-base-freq="2.5"></canvas>
+                    </div>
+                    <div class="bento-cell col-span-3 h-[300px] flex items-center justify-center">
+                        <span class="work-title-outline"
+                            style="-webkit-text-stroke-color: #39FF14; font-size: 120px;">7+</span>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="bento-cell col-span-3 h-[260px]">
+                        <span class="bento-label">DevOps</span>
+                        <h3 class="bento-title">DOCKER / K8S</h3>
+                        <canvas class="freq-canvas" data-base-freq="1.8"></canvas>
+                    </div>
+                    <div class="bento-cell col-span-6 h-[260px]">
+                        <span class="bento-label">Database & API Performance</span>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info"><span>MYSQL</span><span>92%</span></div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" data-percent="92"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info"><span>REDIS</span><span>85%</span></div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" data-percent="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info"><span>POSTGRESQL</span><span>80%</span></div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" data-percent="80"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info"><span>REST API</span><span>95%</span></div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" data-percent="95"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bento-cell col-span-3 h-[260px]">
+                        <span class="bento-label">Serverless</span>
+                        <h3 class="bento-title">NODE / BREF</h3>
+                        <canvas class="freq-canvas" data-base-freq="3"></canvas>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="bento-cell col-span-8 h-[200px] justify-center">
+                        <p class="font-sans-head text-[2.5vw] font-medium leading-tight">
+                            Building systems that handle scale. Team of 6.<br>
+                            40+ production deployments.
+                        </p>
+                    </div>
+                    <div class="bento-cell col-span-4 h-[200px] bg-[#39FF14] text-[#050505] justify-center">
+                        <span class="bento-label" style="color: rgba(5,5,5,0.6);">STATUS</span>
+                        <h3 class="font-sans-head text-[2vw] font-bold">OPEN TO /<br>SENIOR ROLES</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scene 4: Contact -->
+            <section id="scene-contact">
+                <div class="contact-left">
+                    <div class="flex flex-col gap-2">
+                        <span class="giant-text">LET'S</span>
+                        <span class="giant-text"
+                            style="-webkit-text-stroke: 1px #F5F5F5; color: transparent;">BUILD</span>
+                        <span class="giant-text text-[#39FF14]">SOMETHING.</span>
+                    </div>
+
+                    <div class="contact-links">
+                        <div class="contact-row" onclick="window.location.href='mailto:yetjoshua009@gmail.com'">
+                            <span>YETJOSHUA009@GMAIL.COM</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </div>
+                        <div class="contact-row" onclick="window.open('https://github.com/yet-joshua', '_blank')">
+                            <span>GITHUB.COM/YET-JOSHUA</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </div>
+                        <div class="contact-row"
+                            onclick="window.open('https://linkedin.com/in/joshua-yet-23823a347', '_blank')">
+                            <span>LINKEDIN.COM/IN/JOSHUA-YET</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-right">
+                    <span class="bento-label">AVAILABILITY</span>
+                    <div class="flex flex-col mt-4">
+                        <span class="work-title-outline"
+                            style="-webkit-text-stroke-color: #39FF14; font-size: 6vw;">OPEN</span>
+                        <span class="font-sans-head text-[1.5vw] font-bold" style="margin-top: -1vw;">FOR
+                            COLLABORATION</span>
+                    </div>
+
+                    <div class="spec-table">
+                        <div class="spec-row">
+                            <span class="spec-label">TIMEZONE</span>
+                            <span>GMT+8 — Manila</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">RESPONSE</span>
+                            <span>&lt; 24 HRS</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">PREFERRED</span>
+                            <span>REMOTE OR HYBRID</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">RATE</span>
+                            <span>ON REQUEST</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <span class="text-[#333]">© 2026 JOSHUA V. YET</span>
+            <span class="text-[#222]">BUILT WITH RAW PIXELS + MATH</span>
+            <span class="text-[#333]">v1.4.0 — PORTFOLIO ENGINE</span>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- GSAP Registration ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Page Load Sequence ---
+        const tlLoad = gsap.timeline();
+        tlLoad.to("#main-nav", { y: 0, duration: 1.2, ease: "expo.out" })
+            .to(".reveal-text", { y: 0, stagger: 0.15, duration: 1.2, ease: "power4.out" }, "-=0.8")
+            .to("#hero-meta", { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.6")
+            .to("#hero-canvas", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, "-=1");
+
+        // --- Grain Overlay Animation ---
+        const turbulence = document.getElementById('turbulence');
+        setInterval(() => {
+            turbulence.setAttribute('seed', Math.floor(Math.random() * 100));
+        }, 300);
+
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let dotX = mouseX;
+        let dotY = mouseY;
+        let ringX = mouseX;
+        let ringY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function renderCursor() {
+            dotX += (mouseX - dotX) * 0.5;
+            dotY += (mouseY - dotY) * 0.5;
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+
+            cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`;
+            cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+
+            requestAnimationFrame(renderCursor);
+        }
+        renderCursor();
+
+        // --- Three.js Hero Scene ---
+        const canvas = document.getElementById('hero-canvas');
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 18, 0);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const size = 64; // Increased density
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(size * size * 3);
+
+        let idx = 0;
+        const spacing = 0.55; // Adjusted spacing
+        const offset = (size * spacing) / 2;
+
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                positions[idx++] = (i * spacing) - offset;
+                positions[idx++] = 0;
+                positions[idx++] = (j * spacing) - offset;
+            }
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('aOrigin', new THREE.BufferAttribute(positions.slice(), 3));
+
+        const vertexShader = `
+            uniform float uTime;
+            uniform float uAmplitude;
+            uniform vec2 uMouse;
+            uniform float uAspect;
+            attribute vec3 aOrigin;
+
+            void main() {
+                vec3 pos = aOrigin;
+
+                // Wave movement
+                float wave = sin(pos.x * 2.0 + uTime) * cos(pos.z * 2.0 + uTime) * uAmplitude;
+                pos.y += wave;
+
+                // Mouse interaction (Dispersion)
+                vec2 mousePos = uMouse;
+                
+                // 1:1 Calibration: 
+                // Camera dist 18 & FOV 45 provides a visible height of 14.9 units.
+                // Half-height = 7.45.
+                vec2 gridMouse = mousePos * vec2(7.45 * uAspect, 7.45);
+
+                float dist = distance(pos.xz, gridMouse);
+                float force = 1.0 - smoothstep(0.0, 0.8, dist); // Reduced blackhole radius
+                vec2 dir = normalize(pos.xz - gridMouse);
+
+                pos.xz += dir * force * 1.5; // Controlled repulsion strength
+                pos.y += force * 1.0;
+
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                gl_PointSize = 1.6 + force * 1.2;
+            }
+        `;
+
+        const fragmentShader = `
+            void main() {
+                gl_FragColor = vec4(0.2235, 1.0, 0.0784, 0.7);
+            }
+        `;
+
+        const uniforms = {
+            uTime: { value: 0 },
+            uAmplitude: { value: 0.0 },
+            uMouse: { value: new THREE.Vector2(0, 0) },
+            uAspect: { value: window.innerWidth / window.innerHeight }
+        };
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+        });
+
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        let targetAmplitude = 0;
+        window.addEventListener('scroll', () => {
+            const progress = Math.min(window.scrollY / window.innerHeight, 1.0);
+            targetAmplitude = progress * 2.5;
+        });
+
+        const clock = new THREE.Clock();
+        const mouseLerp = new THREE.Vector2(0, 0);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            uniforms.uTime.value = clock.getElapsedTime();
+            uniforms.uAmplitude.value += (targetAmplitude - uniforms.uAmplitude.value) * 0.05;
+
+            // Corrected mouse tracking for 1:1 dispersion
+            mouseLerp.x += (mouseX / window.innerWidth * 2 - 1 - mouseLerp.x) * 0.15;
+            mouseLerp.y += (mouseY / window.innerHeight * 2 - 1 - mouseLerp.y) * 0.15;
+            uniforms.uMouse.value.set(mouseLerp.x, mouseLerp.y);
+
+            points.rotation.y = Math.sin(uniforms.uTime.value * 0.1) * 0.1;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- Scene 2: Horizontal Scroll & GSAP Skew ---
+        const track = document.getElementById('projects-track');
+        const wrapper = document.getElementById('scene-projects-wrapper');
+        const totalScrollWidth = track.scrollWidth - window.innerWidth;
+
+        gsap.to(track, {
+            x: -totalScrollWidth,
+            ease: "none",
+            scrollTrigger: {
+                trigger: wrapper,
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 2.5,
+                invalidateOnRefresh: true,
+                onUpdate: (self) => {
+                    updateCardShaders(Math.abs(self.getVelocity() / 5000));
+                }
+            }
+        });
+
+
+
+        let proxy = { skew: 0 };
+        let skewSetter = gsap.quickSetter(".project-card", "skewX", "deg");
+        let clamp = gsap.utils.clamp(-8, 8);
+
+        ScrollTrigger.create({
+            trigger: wrapper,
+            onUpdate: (self) => {
+                let skew = clamp(self.getVelocity() / -400);
+                if (Math.abs(skew) > Math.abs(proxy.skew)) {
+                    proxy.skew = skew;
+                    gsap.to(proxy, {
+                        skew: 0,
+                        duration: 0.8,
+                        ease: "power4.out",
+                        overwrite: true,
+                        onUpdate: () => skewSetter(proxy.skew)
+                    });
+                }
+            }
+        });
+
+        // --- Card Shaders ---
+        const cardShaders = [];
+        const cardVertexShader = `
+            varying vec2 vUv;
+            uniform float uTime;
+            uniform float uVelocity;
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+                pos.y += sin(pos.x * 10.0 + uTime) * uVelocity * 0.3;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `;
+        const cardFragmentShader = `
+            varying vec2 vUv;
+            void main() {
+                float alpha = 0.05 + 0.05 * sin(vUv.y * 100.0);
+                gl_FragColor = vec4(0.22, 1.0, 0.08, alpha);
+            }
+        `;
+
+        function initCardShaders() {
+            document.querySelectorAll('.card-canvas').forEach(canvas => {
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+                camera.position.z = 2;
+                const geometry = new THREE.PlaneGeometry(4, 3, 32, 32);
+                const uniforms = { uTime: { value: 0 }, uVelocity: { value: 0 } };
+                const material = new THREE.ShaderMaterial({
+                    vertexShader: cardVertexShader, fragmentShader: cardFragmentShader,
+                    uniforms, transparent: true, wireframe: true
+                });
+                const plane = new THREE.Mesh(geometry, material);
+                scene.add(plane);
+                cardShaders.push({ renderer, scene, camera, uniforms });
+            });
+        }
+
+        function updateCardShaders(val) {
+            const time = clock.getElapsedTime();
+            cardShaders.forEach(shader => {
+                shader.uniforms.uTime.value = time;
+                shader.uniforms.uVelocity.value += (val - shader.uniforms.uVelocity.value) * 0.1;
+                shader.renderer.render(shader.scene, shader.camera);
+            });
+        }
+        initCardShaders();
+
+        // --- Scene 3: Frequency Canvases ---
+        class FrequencyCanvas {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.baseFreq = parseFloat(canvas.dataset.baseFreq) || 2;
+                this.phase = 0;
+                this.frequency = this.baseFreq;
+                this.isVisible = false;
+                this.boundUpdate = this.update.bind(this);
+                this.init();
+            }
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                const observer = new IntersectionObserver(entries => {
+                    this.isVisible = entries[0].isIntersecting;
+                    if (this.isVisible) this.update();
+                });
+                observer.observe(this.canvas);
+                document.addEventListener('mousemove', (e) => {
+                    if (!this.isVisible) return;
+                    const rect = this.canvas.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const dist = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
+                    const prox = 1 - Math.min(dist / 400, 1);
+                    this.frequency = this.baseFreq + prox * 18;
+                });
+            }
+            resize() {
+                this.canvas.width = this.canvas.parentElement.clientWidth;
+                this.canvas.height = 80;
+            }
+            update() {
+                if (!this.isVisible) return;
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = '#39FF14';
+                this.ctx.lineWidth = 1;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                for (let x = 0; x <= w; x++) {
+                    const y = h / 2 + Math.sin(x * this.frequency / w * Math.PI * 2 + this.phase) * 20;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+                this.phase += 0.05;
+                requestAnimationFrame(this.boundUpdate);
+            }
+        }
+        document.querySelectorAll('.freq-canvas').forEach(canvas => new FrequencyCanvas(canvas));
+
+        // --- Skill Bars Animation ---
+        const skillObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.to(entry.target, { width: entry.target.dataset.percent + '%', duration: 1.5, ease: "expo.out" });
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.skill-bar-fill').forEach(bar => skillObserver.observe(bar));
+
+        // --- Responsive Handling ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            uniforms.uAspect.value = camera.aspect;
+            cardShaders.forEach((s, i) => {
+                const c = document.querySelectorAll('.card-canvas')[i];
+                s.renderer.setSize(c.clientWidth, c.clientHeight);
+                s.camera.aspect = c.clientWidth / c.clientHeight;
+                s.camera.updateProjectionMatrix();
+            });
+        });
+    </script>
+
+</body>
+
+</html>
