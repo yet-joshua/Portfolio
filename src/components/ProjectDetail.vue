@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project } from '~/types'
+import { withBase } from '~/logics'
 
 defineProps<{
   project: Project
@@ -46,7 +47,7 @@ onUnmounted(() => {
 
         <div v-if="project.hero" class="mb-6 mt-2">
           <img
-            :src="project.hero"
+            :src="withBase(project.hero)"
             :alt="project.name"
             class="w-full rounded-lg shadow object-cover max-h-96"
           >
@@ -130,7 +131,7 @@ onUnmounted(() => {
             <img
               v-for="(img, idx) in project.screenshots"
               :key="idx"
-              :src="img"
+              :src="withBase(img)"
               :alt="`${project.name} screenshot ${idx + 1}`"
               class="w-full rounded-lg shadow object-cover cursor-zoom-in"
             >

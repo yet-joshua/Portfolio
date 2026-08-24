@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from '~/logics'
+
 function toTop() {
   window.scrollTo({
     top: 0,
@@ -44,7 +46,7 @@ const { y: scroll } = useWindowScroll()
         <a href="mailto:joshua.ye.t@gmail.com" title="Email" class="lt-md:hidden">
           <div i-ri-mail-line />
         </a>
-        <a href="/resume.pdf" target="_blank" title="Resume" class="lt-md:hidden">
+        <a :href="withBase('/resume.pdf')" target="_blank" title="Resume" class="lt-md:hidden">
           <div i-ri-file-text-line />
         </a>
         <ToggleTheme />

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project } from '~/types'
+import { withBase } from '~/logics'
 
 defineProps<{ projects: Record<string, Project[]> }>()
 
@@ -33,7 +34,7 @@ function slug(name: string) {
           GitHub
         </a>
         <a
-          href="/resume.pdf"
+          :href="withBase('/resume.pdf')"
           target="_blank"
           class="group btn-emerald inline-block"
         >

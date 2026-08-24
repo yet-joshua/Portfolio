@@ -56,3 +56,12 @@ export function formatDate(d: string | Date, onlyDate = true) {
     return date.format('MMM D')
   return date.format('MMM D, YYYY')
 }
+
+export function withBase(path: string) {
+  if (!path)
+    return ''
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//'))
+    return path
+  const base = import.meta.env.BASE_URL || '/'
+  return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
+}

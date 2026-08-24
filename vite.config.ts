@@ -22,6 +22,7 @@ import { slugify } from './scripts/slugify.ts'
 const promises: Promise<any>[] = []
 
 export default defineConfig({
+  base: process.env.BASE_URL || (process.env.GITHUB_ACTIONS ? '/Portfolio/' : '/'),
   resolve: {
     alias: [
       { find: '~/', replacement: `${resolve(import.meta.dirname, 'src')}/` },
@@ -114,6 +115,9 @@ export default defineConfig({
         'vue',
         VueRouterAutoImports,
         '@vueuse/core',
+      ],
+      dirs: [
+        'src/logics',
       ],
     }),
 
