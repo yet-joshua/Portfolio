@@ -77,7 +77,8 @@ projects:
       solution: 'Delivered an integrated ERP with real-time station workflows, receipt generation, customer SMS notifications, and containerized deployment.'
       role: 'Lead Developer — Architecture, Inertia.js frontend integration, database optimization, and Docker orchestration.'
       screenshots:
-        - '/images/projects/laundry-management/hero.png'
+        - '/images/projects/laundry-management/screenshot-1.png'
+        - '/images/projects/laundry-management/screenshot-2.png'
 
     - name: 'Clinic Patient System'
       desc: 'Legacy PHP rebuild digitizing ~10,000 patient records'
@@ -89,7 +90,9 @@ projects:
       solution: 'Rebuilt the system with modern architecture, migrated 10,000+ sensitive clinical records without downtime, and implemented HIPAA-compliant data auditing.'
       role: 'Full-Stack Developer — Data migration scripts, REST endpoints, and patient records UI.'
       screenshots:
-        - '/images/projects/clinic-patient-system/hero.png'
+        - '/images/projects/clinic-patient-system/screenshot-1.png'
+        - '/images/projects/clinic-patient-system/screenshot-2.png'
+        - '/images/projects/clinic-patient-system/screenshot-3.png'
 
 ---
 
