@@ -7,7 +7,7 @@ art: plum
 
 Hey! I'm Joshua Yet, a full-stack developer based in the Philippines.
 
-I build products end-to-end — REST APIs, admin dashboards, cross-platform mobile apps, and cloud deployments, from concept to production.
+I build products end-to-end REST APIs, admin dashboards, cross-platform mobile apps, and cloud deployments, from concept to production.
 
 Currently at HeroApps, where I lead a team of 5 web developers and ship client work across legal, healthcare, and logistics.
 
@@ -25,4 +25,4 @@ Find me on
   <a href="./resume.pdf" target="_blank"><span op75 i-ri-file-text-line /> Resume</a>
 </p>
 
-Or mail me at <span font-mono>joshua.ye.t<span i-carbon-at/>gmail.com</span>
+Or mail me at <span font-mono>yetjoshua009<span i-carbon-at/>gmail.com</span>
