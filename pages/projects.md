@@ -12,6 +12,11 @@ projects:
       icon: 'i-ph-plant-duotone'
 
   Client:
+    - name: 'Catalyst Outsourcing'
+      link: 'https://attendance.winfinancial.com.sg/attendance/calendar'
+      desc: 'Employee attendance tracking system for a Singapore-based VA outsourcing company — built with Lovable'
+      icon: 'i-ph-buildings-duotone'
+
     - name: 'Dance & Arts UK'
       link: 'https://github.com/yet-joshua/ClubConnectUK'
       desc: 'Club management & scheduling system for a UK dance & arts school'
@@ -97,41 +102,6 @@ projects:
       screenshots:
         - '/images/projects/clinic-patient-system/hero.png'
 
-    - name: 'inventrix'
-      link: 'https://github.com/yet-joshua/inventrix-web'
-      desc: 'Inventory management platform'
-      icon: 'i-ph-package-duotone'
-      hero: '/images/projects/inventrix/hero.png'
-      timeline: '2024'
-      techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'PostgreSQL']
-      problem: 'Small-to-medium retail vendors needed a lightweight barcode-ready stock tracking tool without complex enterprise bloat.'
-      solution: 'Designed an agile inventory dashboard with real-time stock alert thresholds, barcode scanning support, and vendor purchase order workflows.'
-      role: 'Solo Developer — UI/UX design, Next.js application, and database schema.'
-      screenshots:
-        - '/images/projects/inventrix/hero.png'
-      links:
-        - label: 'GitHub'
-          url: 'https://github.com/yet-joshua/inventrix-web'
-          icon: 'i-ph-github-logo-duotone'
-
-    - name: 'webview-rn'
-      link: 'https://github.com/HeroAppsDev/webview-rn'
-      desc: 'Web-to-app native shells for Android & iOS — Expo Router, Compose & SwiftUI'
-      icon: 'i-ph-device-mobile-duotone'
-      hero: '/images/projects/webview-rn/hero.png'
-      timeline: '2024'
-      techStack: ['React Native', 'Expo Router', 'SwiftUI', 'Jetpack Compose']
-      problem: 'Client web platforms needed high-performance native app store wrappers with native push notifications, biometric auth, and offline fallbacks.'
-      solution: 'Developed modular hybrid container shells bridging native platform capabilities with responsive web viewports.'
-      role: 'Mobile Developer — Native bridge integrations, Expo configuration, and build pipelines.'
-      screenshots:
-        - '/images/projects/webview-rn/screenshot-1.png'
-        - '/images/projects/webview-rn/screenshot-2.png'
-        - '/images/projects/webview-rn/screenshot-3.png'
-      links:
-        - label: 'GitHub'
-          url: 'https://github.com/HeroAppsDev/webview-rn'
-          icon: 'i-ph-github-logo-duotone'
 ---
 
 <!-- @layout-full-width -->

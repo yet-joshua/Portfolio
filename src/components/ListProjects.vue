@@ -5,6 +5,7 @@ import { withBase } from '~/logics'
 defineProps<{ projects: Record<string, Project[]> }>()
 
 const selectedProject = ref<Project>()
+const webviewProject = ref<Project>()
 
 function hasDetails(item: Project): boolean {
   return Boolean(item.hero || item.problem || item.solution || item.role || item.screenshots?.length)
@@ -72,7 +73,7 @@ function slug(name: string) {
           class="item relative flex items-center text-left"
           v-bind="hasDetails(item)
             ? { type: 'button', onClick: () => { selectedProject = item } }
-            : (item.link ? { href: item.link, target: '_blank', rel: 'noopener noreferrer' } : {})"
+            : (item.link ? { onClick: (e: MouseEvent) => { e.preventDefault(); webviewProject = item } } : {})"
           :title="item.name"
         >
           <div v-if="item.icon" class="pt-2 pr-5">
