@@ -43,7 +43,7 @@ const { y: scroll } = useWindowScroll()
         <a href="https://www.linkedin.com/in/joshua-yet-23823a347" target="_blank" title="LinkedIn" class="lt-md:hidden">
           <div i-simple-icons-linkedin />
         </a>
-        <a href="mailto:joshua.ye.t@gmail.com" title="Email" class="lt-md:hidden">
+        <a href="mailto:yetjoshua009@gmail.com" title="Email" class="lt-md:hidden">
           <div i-ri-mail-line />
         </a>
         <a :href="withBase('/resume.pdf')" target="_blank" title="Resume" class="lt-md:hidden">
