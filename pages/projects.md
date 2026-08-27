@@ -5,17 +5,14 @@ description: Projects I built solo or shipped for clients
 wrapperClass: 'text-center'
 art: plum
 projects:
-  Solo:
-    - name: 'Rhythm'
-      link: 'https://github.com/yet-joshua/Rhythm'
-      desc: 'Habit-building app for a daily Rule of Life — React Native + Expo'
-      icon: 'i-ph-plant-duotone'
-
   Client:
     - name: 'Catalyst Outsourcing'
       link: 'https://attendance.winfinancial.com.sg/attendance/calendar'
       desc: 'Employee attendance tracking system for a Singapore-based VA outsourcing company — built with Lovable'
       icon: 'i-ph-buildings-duotone'
+      hero: '/images/projects/catalyst/hero.png'
+      screenshots:
+        - '/images/projects/catalyst/screenshot-1.png'
 
     - name: 'Dance & Arts UK'
       link: 'https://github.com/yet-joshua/ClubConnectUK'
@@ -36,18 +33,6 @@ projects:
           url: 'https://github.com/yet-joshua/ClubConnectUK'
           icon: 'i-ph-github-logo-duotone'
 
-    - name: 'NFT Marketplace'
-      desc: 'Frontend overhaul — Next.js, Ethers.js & Web3Modal, fully on-chain'
-      icon: 'i-ph-currency-eth-duotone'
-      hero: '/images/projects/nft-marketplace/hero.png'
-      timeline: '2023 – 2024'
-      techStack: ['Next.js', 'TypeScript', 'Ethers.js', 'Web3Modal', 'Solidity', 'Tailwind CSS']
-      problem: 'Previous web3 frontend had slow wallet connection handshakes, failed transaction states, and poor mobile responsiveness.'
-      solution: 'Refactored state management with wagmi / Web3Modal, integrated optimistic UI updates for minting, and streamlined smart contract interactions.'
-      role: 'Frontend Web3 Engineer — Wallet integration, UI refactor, and smart contract event listeners.'
-      screenshots:
-        - '/images/projects/nft-marketplace/hero.png'
-
   Company:
     - name: 'RoadWatch'
       link: 'https://github.com/HeroAppsDev/roadwatchph-api'
@@ -60,7 +45,10 @@ projects:
       solution: 'Engineered an end-to-end mobile and API solution that captures geo-tagged road defect data with ML inference and auto-dispatches repair work orders.'
       role: 'Lead Full-Stack Developer — REST API architecture, cross-platform mobile app, and cloud infrastructure deployment.'
       screenshots:
-        - '/images/projects/roadwatch/hero.png'
+        - '/images/projects/roadwatch/screenshot-1.png'
+        - '/images/projects/roadwatch/screenshot-2.png'
+        - '/images/projects/roadwatch/screenshot-3.png'
+        - '/images/projects/roadwatch/screenshot-4.png'
       links:
         - label: 'GitHub API'
           url: 'https://github.com/HeroAppsDev/roadwatchph-api'
@@ -76,7 +64,8 @@ projects:
       solution: 'Built a containerized REST API backend and responsive React administration panel deployed on AWS ECS with fine-grained RBAC.'
       role: 'Full-Stack Developer — Backend services, relational database schema design, and admin dashboard UI.'
       screenshots:
-        - '/images/projects/legal-service-app/hero.png'
+        - '/images/projects/legal-service-app/screenshot-1.png'
+        - '/images/projects/legal-service-app/screenshot-2.png'
 
     - name: 'Laundry Management'
       desc: 'Containerized laundry ops system — Laravel 12, React & Inertia'
