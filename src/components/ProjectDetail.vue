@@ -49,7 +49,7 @@ onUnmounted(() => {
           <img
             :src="withBase(project.hero)"
             :alt="project.name"
-            class="w-full rounded-lg shadow object-cover max-h-96"
+            class="w-full rounded-lg shadow object-cover aspect-video bg-black:5"
           >
         </div>
 
@@ -133,7 +133,7 @@ onUnmounted(() => {
               :key="idx"
               :src="withBase(img)"
               :alt="`${project.name} screenshot ${idx + 1}`"
-              class="w-full rounded-lg shadow object-cover cursor-zoom-in"
+              class="w-full rounded-lg shadow object-cover aspect-video bg-black:5 cursor-zoom-in"
             >
           </div>
         </template>
