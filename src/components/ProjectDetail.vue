@@ -75,6 +75,16 @@ onUnmounted(() => {
           </span>
         </div>
 
+        <div v-if="project.tags?.length" class="flex flex-wrap gap-2 my-4">
+          <span
+            v-for="tag in project.tags"
+            :key="tag"
+            class="text-xs md:text-sm px-2.5 py-0.5 rounded-full bg-black:5 dark:bg-white:8 op60 select-none"
+          >
+            {{ tag }}
+          </span>
+        </div>
+
         <p v-if="project.desc" class="text-base op80 my-4">
           {{ project.desc }}
         </p>

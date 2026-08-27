@@ -84,6 +84,15 @@ function slug(name: string) {
               {{ item.name }}
             </div>
             <div class="desc text-sm opacity-50 font-normal" v-html="item.desc" />
+            <div v-if="item.tags?.length" class="flex flex-wrap gap-1 mt-1.5">
+              <span
+                v-for="tag in item.tags"
+                :key="tag"
+                class="text-[10px] px-1.5 py-0.5 rounded bg-black:5 dark:bg:white:8 op50"
+              >
+                {{ tag }}
+              </span>
+            </div>
           </div>
         </component>
       </div>

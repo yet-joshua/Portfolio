@@ -18,4 +18,5 @@ export interface Project {
   screenshots?: string[]
   links?: ProjectLink[]
   timeline?: string
+  tags?: string[]
 }
