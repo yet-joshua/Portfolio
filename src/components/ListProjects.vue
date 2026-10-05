@@ -37,6 +37,7 @@ function slug(name: string) {
         <a
           :href="withBase('/resume.pdf')"
           target="_blank"
+          data-umami-event="resume-download"
           class="group btn-emerald inline-block"
         >
           <div

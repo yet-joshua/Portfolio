@@ -46,7 +46,7 @@ const { y: scroll } = useWindowScroll()
         <a href="mailto:yetjoshua009@gmail.com" title="Email" class="lt-md:hidden">
           <div i-ri-mail-line />
         </a>
-        <a :href="withBase('/resume.pdf')" target="_blank" title="Resume" class="lt-md:hidden">
+        <a :href="withBase('/resume.pdf')" target="_blank" title="Resume" data-umami-event="resume-download" class="lt-md:hidden">
           <div i-ri-file-text-line />
         </a>
         <ToggleTheme />
